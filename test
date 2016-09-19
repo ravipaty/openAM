@@ -1,0 +1,4 @@
+ADD ./am-secrets/* /var/secrets/openam/
+ADD ./dj-secrets/* /var/secrets/opendj/
+ADD ./config-ext/* /var/tmp/config/
+
