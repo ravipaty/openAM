@@ -11,15 +11,19 @@ EXPOSE 8080 8443
 
 ENV MVN_REPO=https://maven.forgerock.org/repo/repo/org/forgerock/openam
 ENV OPENAM_VERSION=13.0.0-SNAPSHOT
-ADD openam.war /tmp/openam.war
-RUN  unzip /tmp/openam.war -d /usr/local/tomcat/webapps/openam \
+
+RUN curl $MVN_REPO/openam-server/$OPENAM_VERSION/openam-server-$OPENAM_VERSION.war \
+-o /tmp/openam.war \
+ && unzip /tmp/openam.war -d /usr/local/tomcat/webapps/openam \
  && curl $MVN_REPO/openam-distribution-ssoconfiguratortools/$OPENAM_VERSION/openam-distribution-ssoconfiguratortools-$OPENAM_VERSION.zip \
-       -o /tmp/ssoconfig.zip \
+ -o /tmp/ssoconfig.zip \
  && unzip /tmp/ssoconfig.zip -d /var/tmp/ssoconfig \
  && curl $MVN_REPO/openam-distribution-ssoadmintools/$OPENAM_VERSION/openam-distribution-ssoadmintools-$OPENAM_VERSION.zip \
-    -o /tmp/ssoadmin.zip \
+ -o /tmp/ssoadmin.zip \
  &&  unzip /tmp/ssoadmin.zip -d /root/admintools \
  && rm /tmp/*zip /tmp/*war
+
+
 
 ADD ssoadm /root/admintools/
 # For testing Docker builds use local files - much faster
